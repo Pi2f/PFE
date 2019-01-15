@@ -1,0 +1,45 @@
+{
+  "name": "tu-streames",
+  "version": "1.0.0",
+  "engines": {
+    "yarn": "1.10.1",
+    "node": "8.11.1"
+  },
+  "description": "Application de streaming de vidéos youtube ou vimeo",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/SecuSIPolytech/securitesi.git"
+  },
+  "author": "François EVEN & Pierre FRANC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/SecuSIPolytech/securitesi/issues"
+  },
+  "homepage": "https://gitlab.com/SecuSIPolytech/securitesi#README",
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.20",
+    "angular": "^1.7.5",
+    "bcrypt": "^3.0.2",
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.1.3",
+    "express": "^4.16.4",
+    "form-data": "^2.3.3",
+    "got": "^9.4.0",
+    "helmet": "^3.15.0",
+    "jquery": "^3.3.1",
+    "jsonwebtoken": "^8.3.0",
+    "method-override": "^3.0.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
+    "popper.js": "^1.14.4",
+    "toastr": "^2.1.4",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.4.1"
+  }
+}
