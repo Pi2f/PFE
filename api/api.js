@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const got = require('got');
+const FormData = require('form-data');
 const jwt = require('jsonwebtoken');
 const config = require('./../config.js');
+const fs = require('fs');
 
 router.get('/:token', function(req, res) {
     verifyToken(req.params.token, function (resp) {
@@ -32,7 +34,6 @@ router.post('/authenticate', function(req, res){
         json: true,
         body: req.body })
     .then(response => {
-        addLoginLog(response.body.user);
         createToken(response.body.user, function (response) {
             res.send(response);
         });
@@ -60,16 +61,6 @@ function createToken(user,cb) {
         user: payload.user
     }
     return cb(response);
-}
-
-function addLoginLog(data, res) {
-    got('/log/login', {
-        baseUrl: config.logApiUrl,
-        json: true,
-        body: data
-    })
-    .then(response => res.send(response.body))
-    .catch(handleError);
 }
 
 router.post('/register', function(req,res) {
@@ -108,11 +99,7 @@ router.post('/user/blocked', function(req,res) {
 });
 
 router.get('/logout/:id', function(req, res){
-    got('/logout/'+req.params.id, { 
-        baseUrl: config.logApiUrl, 
-        json: true })
-    .then(response => res.send(response.body))
-    .catch(handleError);
+    console.log("logout");
 });
 
 router.post('/forgot', function (req, res) {    
@@ -131,6 +118,19 @@ router.post('/resetpw/:token',function(req, res) {
         baseUrl: config.userApiUrl,
         json: true,
         body: req.body
+    }).then(function(response) { 
+        res.send(response.body);
+    })
+    .catch(handleError);
+});
+
+router.post('/photo',function(req,res){
+    const form = new FormData();
+    form.append('file', fs.createReadStream(__dirname+'/../uploads/'+req.file.filename));
+    console.log(form);
+    got('/api/photo', {
+        baseUrl: config.photoApiUrl,
+        body: form
     }).then(function(response) { 
         res.send(response.body);
     })

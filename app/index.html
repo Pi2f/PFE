@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app="Melanome">
+
+<head>
+  <title>Melanome</title>
+  <meta charset="utf-8" />
+
+  <script src="js/assets/jquery.min.js"></script>
+  <script src="js/assets/popper.min.js"></script>
+  <script src="js/assets/toastr.min.js"></script>
+  <script src="js/assets/toggle.min.js"></script>
+
+  <link rel="stylesheet" href="./css/toastr.css">
+  <link href="./css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link href="./css/toggle.min.css" rel="stylesheet" id="my-css">
+  <link href="./css/myCss.css" rel="stylesheet" id="my-css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+
+  <script src="js/assets/bootstrap.min.js"></script>
+  <script src="js/assets/popper.min.js"></script>
+  <script src="js/assets/angular.min.js"></script>
+  <script src="js/assets/angular-ui-router.min.js"></script>
+  <script src="js/routing.js"></script>
+  <script src="js/assets/ui-bootstrap-tpls.js"></script>
+
+  <script src="js/assets/jquery.dataTables.min.js"></script>
+  <script src="js/assets/dataTables.bootstrap4.min.js"></script>
+
+  <script src="js/user/connectionCtrl.js"></script>
+  <script src="js/user/connectionService.js"></script>
+
+  <script src="js/user/mdpOublieCtrl.js"></script>
+  <script src="js/user/mdpReinitCtrl.js"></script>
+  <script src="js/user/registerCtrl.js"></script>
+  <script src="js/user/userService.js"></script>
+  <script src="js/user/sessionService.js"></script>
+
+  <script src="js/photos/galerieCtrl.js"></script>
+  <script src="js/photos/appPhotoCtrl.js"></script>
+  <script src="ng-file-upload/dist/ng-file-upload.min.js"></script>
+
+</head>
+
+<body ng-controller="connectionCtrl">
+  <nav ng-if="user" id="navbar_melanome" class="navbar navbar-default">
+    <a class="navbar-brand col-md-1">Melanome</a>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+      <ul class="nav navbar-nav">
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bars"></i>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#"><i class="fas fa-camera-retro"></i> Appareil photo</a></li>
+            <li><a ui-sref="galerie" ui-sref-active="active"><i class="fas fa-images"></i> Galerie</a></li>
+            <li><a><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </nav>
+  <ui-view></ui-view>
+
+
+
+</body>
+
+</html>

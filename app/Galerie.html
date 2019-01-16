@@ -1,0 +1,35 @@
+<h1 class="col-md-12" align="center"> <strong>Galerie</strong></h1>
+<div class='content row' ng-controller="galerieCtrl">
+
+    <div ng-if="!pictures" class="col-md-12" align="center">
+        <h4>Pas de photos enregistrées ... </h4>
+    </div>
+    <div ng-if="pictures">
+        <div align="center" class="col-md-12" ng-show="pictureList.length != 0">
+            <button class="btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                Previous
+            </button>
+            {{currentPage+1}}/{{numberOfPages()}}
+            <button class="btn-primary" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                Next
+            </button>
+        </div>
+        <div class='col-md-12 row' align="center">
+            <div ng-repeat="picture in pictureList | startFrom:currentPage*pageSize | limitTo:pageSize">
+                <div>
+                    <a class="pictureLink col-md-4" id="pictureLink"> <img src="{{picture.link}}" width="350" height="350"
+                            style="margin: 5%;"></a>
+                </div>
+            </div>
+        </div>
+        <div align="center" class="col-md-12" ng-show="pictureList.length != 0">
+            <button class="btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                Previous
+            </button>
+            {{currentPage+1}}/{{numberOfPages()}}
+            <button class="btn-primary" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                Next
+            </button>
+        </div>
+    </div>
+</div>

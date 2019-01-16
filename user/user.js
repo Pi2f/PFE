@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    job: {
+        type: String
+    },
     role: {
         type: Array,
         required: true,
@@ -52,7 +55,7 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordExpires: {
         type: Date
-    }
+    },
 });
 
 userSchema.pre('save', function (next) {
