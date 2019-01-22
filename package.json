@@ -38,7 +38,8 @@
     "nodemon": "^1.18.9",
     "popper.js": "^1.14.4",
     "toastr": "^2.1.4",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "webcam": "^3.2.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.4.1"

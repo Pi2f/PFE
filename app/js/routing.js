@@ -1,4 +1,4 @@
-var myApp = angular.module('Melanome',['ui.router', 'ngFileUpload']);
+var myApp = angular.module('Melanome',['ui.router', 'ngFileUpload', 'webcam']);
 
 myApp.config(function($stateProvider) {
 

@@ -38,7 +38,7 @@
   <script src="js/photos/galerieCtrl.js"></script>
   <script src="js/photos/appPhotoCtrl.js"></script>
   <script src="ng-file-upload/dist/ng-file-upload.min.js"></script>
-
+  <script src="webcam/dist/webcam.min.js"></script>
 </head>
 
 <body ng-controller="connectionCtrl">
@@ -55,7 +55,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bars"></i>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#"><i class="fas fa-camera-retro"></i> Appareil photo</a></li>
+            <li><a ui-sref="appPhoto" ui-sref-active="active"><i class="fas fa-camera-retro"></i> Appareil photo</a></li>
             <li><a ui-sref="galerie" ui-sref-active="active"><i class="fas fa-images"></i> Galerie</a></li>
             <li><a><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
           </ul>

@@ -156,7 +156,6 @@ module.exports = {
         } else {
             cb("Invalide password or mail");
         }
-        cb();   
     },
 
     signin: function(mail, password, cb){  
