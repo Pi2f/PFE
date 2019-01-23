@@ -1,14 +1,54 @@
+<div class="container" ng-controller="appPhotoCtrl">
+    <div class="row mx-0">
+        <div class="mx-auto my-3 text-center">
+            <h1><strong>Appareil photo</strong></h1>
+            <div class="card">
+                <div class="card-header">
+                    Prenez une photo
+                </div>
+                <div class="card-img-top">
+                    <webcam channel="channel" on-streaming="onSuccess()" on-error="onError(err)" on-stream="onStream(stream)"></webcam>
+                </div>
+                <div class="card-body">
+                    <p ng-show="webcamError" class="text-danger">Webcam could not be started. Did you give access to
+                        it?</p>
+                    <button type="button" class="btn btn-primary btn-lg" ng-click="makeSnapshot()" data-toggle="modal" data-target="#myModal"><i class="fa fa-camera mr-2"></i>Capture</button>
 
-
-<div ng-controller="appPhotoCtrl">
-
-    <div class="alert alert-error ng-scope" ng-show="webcamError">
-        <span>Webcam could not be started. Did you give access to it?</span>
+                    <button type="button" class="btn btn-secondary btn-lg" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                        ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" ng-click="upload()"><i class="fa fa-upload mr-2"></i>
+                        Upload</button>
+                </div>
+            </div>
+            <div ng-if="progressPercentage" class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{progressPercentage}}"
+                    aria-valuemin="0" aria-valuemax="100" ng-style="width: {{progressPercentage}}"></div>
+            </div>
+        </div>
     </div>
-    <webcam channel="channel" 
-        on-streaming="onSuccess()" 
-        on-error="onError(err)" 
-        on-stream="onStream(stream)"></webcam>
-    <button ng-click="makeSnapshot()">take picture</button>
-    <canvas id="snapshot" width="300" height="300"></canvas>
+    <div class="modal" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter la photo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-header">
+                            Prenez une photo
+                        </div>
+                        <div class="card-img-top">
+                            <canvas id="snapshot"></canvas>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="send()">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="cancel()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

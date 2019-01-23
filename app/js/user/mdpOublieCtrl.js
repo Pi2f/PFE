@@ -1,4 +1,4 @@
-myApp.controller('mdpOublieCtrl', function($scope, $rootScope, $stateParams, $state, $location,userService) {
+myApp.controller('mdpOublieCtrl', function($scope,userService) {
   
         $scope.forgot = function (){
           userService.forgot($scope.email).then(function () {

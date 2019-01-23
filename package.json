@@ -2,7 +2,7 @@
   "name": "tu-streames",
   "version": "1.0.0",
   "engines": {
-    "yarn": "1.10.1",
+    "yarn": "1.13.0",
     "node": "8.11.1"
   },
   "description": "Application de streaming de vidéos youtube ou vimeo",
@@ -42,6 +42,6 @@
     "webcam": "^3.2.1"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.4.1"
+    "@fortawesome/fontawesome-free": "^5.6.3"
   }
 }

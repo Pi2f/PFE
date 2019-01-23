@@ -1,32 +1,28 @@
-myApp.controller('galerieCtrl', function($scope, $rootScope, $stateParams, $state, $location) {
+myApp.controller('galerieCtrl', function ($scope, photoService) {
 
-    $scope.pictureList = [];
+    $scope.imgSrc = [];
 
     $scope.currentPage = 0;
 
     $scope.pageSize = 9;
 
-    $scope.pictures = false;
-
-    $scope.numberOfPages=function(){
-        return Math.ceil($scope.pictureList.length/$scope.pageSize);                
+    $scope.numberOfPages = function () {
+        return Math.ceil($scope.imgSrc.length / $scope.pageSize);
     }
 
-    $scope.getPicturesList = function (){
-        for(var i=1; i<20; i++){
-            $scope.pictureList.push({link: '../../images/photo_' + i + '.jpg'});
-        }
-        if($scope.pictureList.length!=0){
-            $scope.pictures = true;
-        }
-    };
- 
-    $scope.getPicturesList();
+
+    $scope.getFiles = function () {
+        photoService.GetPhotos().then(function (res) {
+            $scope.imgSrc = res;
+        });
+    }
+
+    $scope.getFiles();
 
 })
 
-myApp.filter('startFrom', function() {
-    return function(input, start) {
+myApp.filter('startFrom', function () {
+    return function (input, start) {
         start = +start; //parse to int
         return input.slice(start);
     }

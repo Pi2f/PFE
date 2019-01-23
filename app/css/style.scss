@@ -1,0 +1,17 @@
+$fa-font-path: "../webfonts";
+
+
+@import "_variables";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "_bootswatch";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
+@import "../../node_modules/toastr/toastr";
+
+body {
+    background-color:#fff0e6;
+}
+
+.dropdown-item {
+    color: $primary;
+}

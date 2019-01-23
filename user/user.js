@@ -3,12 +3,14 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const config = require('./config.js');
 
-mongoose.connect(config.urlDB,{
+mongoose.connect(config.urlDB, {
     useFindAndModify: false,
     useNewUrlParser: true,
     useCreateIndex: true,
-}, function(err) {
-    if (err) { throw err; } else {
+}, function (err) {
+    if (err) {
+        throw err;
+    } else {
         console.log('Mongo: Database connected');
     }
 });
@@ -22,7 +24,6 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
     mail: {
@@ -34,9 +35,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    job: {
-        type: String
-    },
     role: {
         type: Array,
         required: true,
@@ -45,6 +43,12 @@ const userSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true,
+    },
+    activationToken: {
+        type: String
+    },
+    activationTokenExpires: {
+        type: Date
     },
     isBlocked: {
         type: Boolean,
@@ -55,17 +59,17 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordExpires: {
         type: Date
-    },
+    }
 });
 
 userSchema.pre('save', function (next) {
-    var user = this;
+    const user = this;
     bcrypt.hash(user.password, 8, function (err, hash) {
-      if (err) {
-        throw err;
-      }
-      user.password = hash;
-      next();
+        if (err) {
+            throw err;
+        }
+        user.password = hash;
+        next();
     });
 });
 
@@ -75,12 +79,14 @@ function isStrongPassword(data) {
 }
 
 function isValidMail(data) {
-    const validMail = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);    
+    const validMail = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     return validMail.test(data);
 }
 
-function checkForExistingUser(mail, cb){
-    userModel.findOne({mail: mail}, function(err, result){
+function checkForExistingUser(mail, cb) {
+    userModel.findOne({
+        mail: mail
+    }, function (err, result) {
         cb(result);
     });
 }
@@ -89,148 +95,139 @@ function checkForExistingUser(mail, cb){
 const userModel = mongoose.model('Users', userSchema);
 
 module.exports = {
-    isAdmin: function(data, cb){
+    isAdmin: function (data, cb) {
         return userModel.findOne({
             _userID: data,
         }, function (err, user) {
-           cb(err, user.role.indexOf('admin') !== -1);
+            cb(err, user.role.indexOf('admin') !== -1);
         });
     },
 
-    setAdmin: function(data, cb){
-        if(data.role.indexOf('admin') === -1){
+    setAdmin: function (data, cb) {
+        if (data.role.indexOf('admin') === -1) {
             data.role.push('admin');
             return userModel.findOneAndUpdate({
-                _userID: data._userID,
-            }, { role: data.role },
-            function (err, user) {
-                cb(err, user);
-            });
+                    _userID: data._userID,
+                }, {
+                    role: data.role
+                },
+                function (err, user) {
+                    cb(err, user);
+                });
         } else {
-            data.role.splice(1,data.role.indexOf('admin'));
+            data.role.splice(1, data.role.indexOf('admin'));
             return userModel.findOneAndUpdate({
-                _userID: data._userID,
-            }, { role: data.role },
-            function (err, user) {
-                cb(err, user);
-            });
+                    _userID: data._userID,
+                }, {
+                    role: data.role
+                },
+                function (err, user) {
+                    cb(err, user);
+                });
         }
 
     },
 
-    isBlocked: function(data, cb){
+    isBlocked: function (data, cb) {
         return userModel.findOne({
             _userID: data._userID,
         }, function (err, user) {
-           cb(err, user.isBlocked);
+            cb(err, user.isBlocked);
         });
     },
 
-    toggleBlocked: function(data, cb){
-        return userModel.findOneAndUpdate({
+    isActive: function (data, cb) {
+        return userModel.findOne({
             _userID: data._userID,
-        }, { isBlocked: !data.isBlocked },
-        function (err, user) {
-            cb(err, user);
+        }, function (err, user) {
+            cb(err, user.isActive);
         });
     },
 
-    subscribe: function(data, cb){
-        if(isStrongPassword(data.password) && isValidMail(data.mail)){
-            checkForExistingUser(data.mail, function(result){
-                if(result == null){
-                    const userData = new userModel({
-                        username: data.username,
-                        mail: data.mail,
-                        password: data.password,
-                        _userID: uuidv4()
-                    });
-                    userData.save(function(err){
-                        if(err) cb(err);
-                    });
-                } else {
-                    cb("Mail déjà utilisé par un autre utilisateur");
-                }
-            });
-            
+    subscribe: function (data, cb) {
+        if (isValidMail(data.mail)) {
+            if (isStrongPassword(data.password)) {
+                checkForExistingUser(data.mail, function (result) {
+                    if (result == null) {
+                        const userData = new userModel({
+                            username: data.username,
+                            mail: data.mail,
+                            password: data.password,
+                            _userID: uuidv4()
+                        });
+                        userData.save(function (err) {
+                            if (err) cb(err);
+                            cb();
+                        });
+                    } else {
+                        cb("Mail already assigned to an other user");
+                    }
+                });
+            } else {
+                cb("Password must have 8 characters min\n including (one special character !@#\$%\^&\*, one digit 0-9, one uppercase A-Z and one lowercase a-z)");
+            }
         } else {
-            cb("Invalide password or mail");
+            cb("Wrong mail (Example mail : my.example@host.org)")
         }
     },
 
-    signin: function(mail, password, cb){  
-        userModel.findOne({mail: mail}, 
-            function(err, user){
-                if(err){
+    signin: function (mail, password, cb) {
+        userModel.findOne({
+                mail: mail
+            },
+            function (err, user) {
+                if (err) {
                     cb(err);
-                } else if (!user){                    
-                    cb("L'utilisateur n'existe pas");
+                } else if (!user) {
+                    cb("User doesn't exist");
                 } else {
-                    bcrypt.compare(password, user.password, function(err, result) {                        
-                        if(result === true){                            
+                    bcrypt.compare(password, user.password, function (err, result) {
+                        if (result === true) {                        
                             cb(null, user);
-                        } else {                
-                            cb("Password false");
-                        }                        
+                        } else {
+                            cb("Wrong password");
+                        }
                     });
                 }
             }
         )
     },
 
-    getAll: function(cb){
-        userModel.find({}, function(err, users) {
-            if(err) cb(err);
-            else cb(null, users);
-        })
-    },
-
-    get: function(id,cb){
-        userModel.findOne({_userID: id}, function(err, user) {
-            if(err) cb(err);
-            else cb(null, user);
-        })
-    },
-
-
-    changePassword: function(body, token, done){
-        return userModel.findOne({
+    changePassword: function (body, token, done) {
+        return userModel.findOneAndUpdate({
             mail: body.mail
-          }, function (err, user) {
-    
+        }, {
+            resetPasswordToken: token,
+            resetPasswordExpires: Date.now() + 3600000,
+        }, function (err, user) {
             if (!user) {
-              done('No account with that email address exists.', null, null);
+                done('No account with that email address exists.', null, null);
+            } else {
+                done(err, token, user);
             }
-    
-            user.resetPasswordToken = token;
-            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-    
-            user.save(function (err) {
-              if (err) cb(err);
-              done(err, token, user);
-            });
-          });
+        });
     },
 
-    resetPassword: function(token, password, done){
-        userModel.findOne({
+    resetPassword: function (token, password, done) {
+        return userModel.findOne({
             resetPasswordToken: token,
             resetPasswordExpires: {
-              $gt: Date.now()
+                $gt: Date.now()
             }
-          }, function (err, user) {
-            if (!user) {
-              done('Password reset token is invalid or has expired.',null);
+        }, function (err, user) {
+            if (err) {
+                done('Password reset token is invalid or has expired.', null);
             } else {
                 user.password = password;
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
-        
-                user.save(function (err) {              
-                  done(err, user);
-                });
+                user.save(function (err) {
+                    if (err) {
+                        done(err, null);
+                    }
+                })
+                done(err, user);
             }
-    
-          });
-    }
+        });
+    },
 }

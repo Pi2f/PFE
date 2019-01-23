@@ -1,4 +1,4 @@
-myApp.factory('sessionService',['$http', '$q', function($http,$q){
+myApp.factory('sessionService',['$http', function($http){
     var serv = {};
     
     serv.getToken = function(){
@@ -16,7 +16,7 @@ myApp.factory('sessionService',['$http', '$q', function($http,$q){
      serv.getSession = function(){
         var token = serv.getToken();
         if(token != null) {
-            return $http.get('/api/'+token)
+            return $http.get('/api/session')
             .then(function(response){
                 var session = {
                     user: response.data.user,

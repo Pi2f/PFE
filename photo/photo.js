@@ -15,6 +15,12 @@ mongoose.connect(config.urlDB,{
 
 const photoSchema = new mongoose.Schema({
     userID: {
+        type: String
+    },
+    fieldname: {
+        type: String,
+    },
+    originalname: {
         type: String,
     },
     img: 
@@ -24,21 +30,26 @@ const photoSchema = new mongoose.Schema({
 const photoModel = mongoose.model('Photos', photoSchema);
 
 module.exports = {
-    addPhoto: function (data){
+    addPhoto: function (data, cb){
         const newPhoto = new photoModel();
-        newPhoto.img.data = fs.readFileSync(data.path)
-        newPhoto.img.contentType = 'image/png';
         newPhoto.userID = data.id;
+        newPhoto.img.data = data.buffer.data;
+        newPhoto.img.contentType = 'image/png';
+        newPhoto.fieldname = data.fieldname;
+        newPhoto.originalname = data.originalname;
         newPhoto.save(function(err){
             if(err) console.log(err);
-            else console.log("Image saved to mongo");
+            else {
+                console.log("Image saved to mongo");
+                cb();
+            } 
         });
     },
 
-    getPhoto: function(id){
+    getPhoto: function(id, cb){
         photoModel.find({userID: id},function(err, photo){
             if(err) console.log(err);
-            else cb(photo);
+            else cb(null,photo);
         })
     }
 }

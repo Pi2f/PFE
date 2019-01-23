@@ -1,4 +1,4 @@
-myApp.controller('registerCtrl', function($scope, $rootScope, $stateParams, $state, $location,userService) {
+myApp.controller('registerCtrl', function($scope, $state,userService) {
 
     $scope.register= function(){
         var form = {

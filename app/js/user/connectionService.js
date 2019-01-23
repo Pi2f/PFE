@@ -1,4 +1,4 @@
-myApp.factory('connectionService',['$http', '$q', 'sessionService', function($http,$q,sessionService){
+myApp.factory('connectionService',['$http', 'sessionService', function($http,sessionService){
     var serv = {};
     
     serv.login = function(email,pw){
@@ -7,7 +7,7 @@ myApp.factory('connectionService',['$http', '$q', 'sessionService', function($ht
             password : pw
         };
 
-        return $http.post('/api/authenticate',req)
+        return $http.post('/authenticate',req)
             .then(function(response){
                 if(response.data.err){
                     return response.data;

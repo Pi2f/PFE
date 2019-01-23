@@ -1,4 +1,4 @@
-myApp.controller('mdpReinitCtrl', function($scope, $rootScope, $stateParams, $state, $location,userService) {
+myApp.controller('mdpReinitCtrl', function($scope, $state,userService) {
   
     $scope.reset = function(){
         if ($scope.pw == vm.pwConfirm) {

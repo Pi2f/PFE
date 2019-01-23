@@ -6,32 +6,30 @@ const config = require('./config.js');
 const methodOverride = require('method-override');
 const helmet = require('helmet');
 const photo = require('./photo.js');
-const multer = require('multer');
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(methodOverride());
-app.use(bodyParser.urlencoded({
-  'extended': 'true'
-}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(express.static(__dirname));
-
-app.use(multer({ dest: './uploads/' }).any());
 
 
 app.use(function onError(err, req, res, next) {
   res.status(500).send(err);
 });
 
-app.post('/api/photo',function(req,res){
-  console.log(req.files);
-    // photo.addPhoto(req.files[0]);
+app.post('/photo', function(req,res){
+    photo.addPhoto(req.body, function () {
+      res.status(200).end();
+    });
 });
 
-app.get('/api/photo/:id',function(req,res){
-    photo.getPhoto(req.params.id);
+app.get('/photo/:id',function(req,res){
+    photo.getPhoto(req.params.id, function(err, photos){
+      res.status(200).send(photos);
+    });
 });
 
 const server = http.createServer(app).listen(config.port, function () {

@@ -1,5 +1,4 @@
-myApp.controller('connectionCtrl', function($scope, connectionService, $state) {
-
+myApp.controller('connectionCtrl', function($scope, connectionService, $state, sessionService) {
     $scope.login = function(){
         connectionService.login($scope.email, $scope.pw).then(function(data){
             if(data.err){
@@ -13,9 +12,5 @@ myApp.controller('connectionCtrl', function($scope, connectionService, $state) {
         $scope.email = '';
         $scope.mdp = '';
     };
-
-    connectionService.isAuthenticated().then(function (res) {
-        $scope.user = res;
-    });
 
 })

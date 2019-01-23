@@ -6,9 +6,9 @@ const config = require('./config.js');
 const methodOverride = require('method-override');
 const helmet = require('helmet');
 const user = require('./user.js');
-var nodemailer = require('nodemailer');
-var crypto = require('crypto');
-var waterfall = require('async-waterfall');
+const mail = require('./mail.js')
+const crypto = require('crypto');
+const waterfall = require('async-waterfall');
 
 const app = express();
 
@@ -48,11 +48,19 @@ app.get('/user/all/:id', function (req, res) {
 app.post('/user/authenticate', function (req, res) {
   if (req.body.mail && req.body.password) {
     user.signin(req.body.mail, req.body.password, function (err, data) {      
-      if (err) res.status(200).send({err: err});
+      if (err) {
+        res.status(200).send({err: err});
+      }
       else {
         user.isBlocked(data, function (err, isBlocked) {
           if (!isBlocked) {
-            res.status(200).send(JSON.stringify({user: data}));            
+            user.isActive(data, function (err, isActive) {              
+              if (isActive) {
+                res.status(200).send(JSON.stringify({user: data}));
+              } else {
+                res.status(403).end();
+              }
+            } );           
           } else {
             res.status(403).end();
           }
@@ -64,16 +72,47 @@ app.post('/user/authenticate', function (req, res) {
 
 app.post('/user/register', function (req, res) {
   user.subscribe(req.body, function (err) {
-    console.log(err);
     if (err) {
-        res.status(500).send({
-          error: err
-        });
-    }else{
       res.status(200).send({
-        success: true
+        err: err
       });
+    } else  {
+      
+      waterfall([ 
+        function (done) {
+          crypto.randomBytes(20, function (err, buf) {
+            if (err) console.log("erreur crypto : " + err)
+            const token = buf.toString('hex');
+            done(err, token);
+          });
+        },
+        function (token, done) {
+          user.setActivationToken(req.body, token, done)
+        },      
+        function (token, user, done) {
+          mail.setActivationTokenMail(user,token,done);
+        }
+      ], function (err) {
+        if (err) console.log("ERREUR : "+err);
+        res.status(200).end();
+      });
+     
+      res.status(200).send({success: true});
     }
+  });
+});
+
+app.post('/user/activateAccount/:token', function (req, res) {
+  waterfall([
+    function (done) {
+      user.activateAccount(req.params.token, done)
+    },
+    function (user, done) {
+     mail.activateAccountMail(user,done);
+    }
+  ], function (err) {
+    if (err) console.log("ERREUR : "+err);
+    res.status(200).end();
   });
 });
 
@@ -103,44 +142,16 @@ app.post('/user/blocked', function (req, res) {
 app.post('/forgot', function (req, res) {
   waterfall([
     function (done) {
-      crypto.randomBytes(20, function (err, buf) {
-        if (err) console.log("erreur crypto : " + err)
-        var token = buf.toString('hex');
-        done(err, token);
-      });
+      
     },
     function (token, done) {
       user.changePassword(req.body, token, done)
     },
     function (token, user, done) {
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'tustreamesnoreply@gmail.com',
-          pass: 'heihei89'
-        }
-      });
-      var mailOptions = {
-        to: user.mail,
-        from: 'tustreamesnoreply@gmail.com',
-        subject: 'Password Reset',
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          //'https://' + routeurHost + '/api/reset/' + token + '\n\n' +
-          'https://localhost:3000/#!/passwordReset?token=' + token + '\n\n' + //A test !
-          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-      };
-      transporter.sendMail(mailOptions, function (err) {
-        if (err) console.log("erreur transporteur : " + err);
-        console.log('An e-mail has been sent to ' + user.email + ' with further instructions.');
-        done(err, 'done');
-      });
+      mail.forgotMail(user,token,done);
     }
   ], function (err) {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
+    if (err) console.log("ERREUR : "+err);
     res.status(200).end();
   });
 });
@@ -151,32 +162,14 @@ app.post('/reset/:token', function (req, res) {
       user.resetPassword(req.params.token, req.body.password, done)
     },
     function (user, done) {
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'tustreamesnoreply@gmail.com',
-          pass: 'heihei89'
-        }
-      });
-      var mailOptions = {
-        to: user.mail,
-        from: 'tustreamesnoreply@gmail.com',
-        subject: 'Your password has been changed',
-        text: 'Hello,\n\n' +
-          'This is a confirmation that the password for your account ' + user.mail + ' has just been changed.\n'
-      };
-      transporter.sendMail(mailOptions, function (err) {
-        done(err);
-      });
+      mail.reste(user,done);
     }
   ], function (err) {
+    if (err) console.log("ERREUR : "+err);
     res.status(200).end();
   });
 });
 
-
-
-
-const server = http.createServer(app).listen(config.port, function () {
+const server = http.createServer(app).listen(process.env.PORT || config.port, function () {
   console.log(`Example app listening on port ${config.port}!`)
 });

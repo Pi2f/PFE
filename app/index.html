@@ -5,27 +5,21 @@
   <title>Melanome</title>
   <meta charset="utf-8" />
 
-  <script src="js/assets/jquery.min.js"></script>
-  <script src="js/assets/popper.min.js"></script>
-  <script src="js/assets/toastr.min.js"></script>
-  <script src="js/assets/toggle.min.js"></script>
-
-  <link rel="stylesheet" href="./css/toastr.css">
-  <link href="./css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="./css/style.css" type="text/css">
   <link href="./css/toggle.min.css" rel="stylesheet" id="my-css">
-  <link href="./css/myCss.css" rel="stylesheet" id="my-css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
-  <script src="js/assets/bootstrap.min.js"></script>
-  <script src="js/assets/popper.min.js"></script>
-  <script src="js/assets/angular.min.js"></script>
-  <script src="js/assets/angular-ui-router.min.js"></script>
+  <script type="text/javascript" src="./jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="./@fortawesome/fontawesome-free/js/all.min.js"></script>
+  <script type="module" src="./popper.js/dist/popper-utils.min.js"></script>
+  <script type="module" src="./popper.js/dist/popper.min.js"></script>
+  <script type="text/javascript" src="./bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./angular/angular.min.js"></script>
+  <script type="text/javascript" src="./@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+  <script type="text/javascript" src="./toastr/toastr.js"></script>
+  <script src="ng-file-upload/dist/ng-file-upload.min.js"></script>
+  <script src="webcam/dist/webcam.min.js"></script>
+  
   <script src="js/routing.js"></script>
-  <script src="js/assets/ui-bootstrap-tpls.js"></script>
-
-  <script src="js/assets/jquery.dataTables.min.js"></script>
-  <script src="js/assets/dataTables.bootstrap4.min.js"></script>
-
   <script src="js/user/connectionCtrl.js"></script>
   <script src="js/user/connectionService.js"></script>
 
@@ -37,36 +31,33 @@
 
   <script src="js/photos/galerieCtrl.js"></script>
   <script src="js/photos/appPhotoCtrl.js"></script>
-  <script src="ng-file-upload/dist/ng-file-upload.min.js"></script>
-  <script src="webcam/dist/webcam.min.js"></script>
+  <script src="js/photos/photoService.js"></script>
+
+  <script src="js/auth-interceptor.js"></script>
 </head>
 
 <body ng-controller="connectionCtrl">
-  <nav ng-if="user" id="navbar_melanome" class="navbar navbar-default">
-    <a class="navbar-brand col-md-1">Melanome</a>
+  <nav ng-if="user" class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Melanome</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-      <ul class="nav navbar-nav">
-
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bars"></i>
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bars text-white"></i>
           </a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a ui-sref="appPhoto" ui-sref-active="active"><i class="fas fa-camera-retro"></i> Appareil photo</a></li>
-            <li><a ui-sref="galerie" ui-sref-active="active"><i class="fas fa-images"></i> Galerie</a></li>
-            <li><a><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
-          </ul>
+          <div class="dropdown-menu py-0" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -100px; transform: translate3d(0px, 42px, 0px);">
+            <a class="dropdown-item" href="#" ui-sref="appPhoto" ui-sref-active="active"><i class="fas fa-camera-retro"></i> Appareil photo</a>
+            <a class="dropdown-item" href="#" ui-sref="galerie" ui-sref-active="active"><i class="fas fa-images"></i> Galerie</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+          </div>
         </li>
       </ul>
-    </div>
-    </div>
   </nav>
+
   <ui-view></ui-view>
-
-
 
 </body>
 

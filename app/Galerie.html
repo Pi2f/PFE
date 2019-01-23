@@ -1,35 +1,47 @@
-<h1 class="col-md-12" align="center"> <strong>Galerie</strong></h1>
-<div class='content row' ng-controller="galerieCtrl">
-
-    <div ng-if="!pictures" class="col-md-12" align="center">
+<div class="fluid-container text-center" ng-controller="galerieCtrl">
+    <h1><strong>Galerie</strong></h1>
+    <div ng-if="!imgSrc">
         <h4>Pas de photos enregistrées ... </h4>
     </div>
-    <div ng-if="pictures">
-        <div align="center" class="col-md-12" ng-show="pictureList.length != 0">
-            <button class="btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                Previous
-            </button>
-            {{currentPage+1}}/{{numberOfPages()}}
-            <button class="btn-primary" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-                Next
-            </button>
+    <div class="mx-0 my-3 text-center" ng-if="imgSrc">
+        <div class="row justify-content-center" ng-show="imgSrc.length != 0">
+            <ul class="pagination my-3 text-white">
+                <li class="page-item">
+                    <a class="page-link" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                        Previous </a>
+                </li>
+                <li class="page-item disable">
+                    <a class="page-link active">
+                        {{currentPage+1}}/{{numberOfPages()}} </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link active" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                        Next </a>
+                </li>
+            </ul>
         </div>
-        <div class='col-md-12 row' align="center">
-            <div ng-repeat="picture in pictureList | startFrom:currentPage*pageSize | limitTo:pageSize">
-                <div>
-                    <a class="pictureLink col-md-4" id="pictureLink"> <img src="{{picture.link}}" width="350" height="350"
-                            style="margin: 5%;"></a>
-                </div>
+        <div class="row mx-0">
+            <div class="col-md-3" ng-repeat="i in imgSrc | startFrom: currentPage*pageSize | limitTo:pageSize">
+                <a href="data:image/jpg;base64,{{i}}">
+                    <img class="img-fluid img-thumbnail rounded bg-secondary" alt="image" ng-src="data:image/jpg;base64,{{i}}">
+                </a>
             </div>
         </div>
-        <div align="center" class="col-md-12" ng-show="pictureList.length != 0">
-            <button class="btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                Previous
-            </button>
-            {{currentPage+1}}/{{numberOfPages()}}
-            <button class="btn-primary" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-                Next
-            </button>
+        <div class="row mx-auto justify-content-center" ng-show="imgSrc.length != 0">
+            <ul class="pagination my-3 text-white">
+                <li class="page-item">
+                    <a class="page-link" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                        Previous </a>
+                </li>
+                <li class="page-item disable">
+                    <a class="page-link active">
+                        {{currentPage+1}}/{{numberOfPages()}} </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link active" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                        Next </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

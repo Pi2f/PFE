@@ -1,8 +1,8 @@
-myApp.factory('userService',['$http', '$q', function($http,$q,sessionService){
+myApp.factory('userService',['$http', function($http){
     var serv = {};
 
     serv.createUser = function(form){
-        return $http.post('/api/register',form)
+        return $http.post('/register',form)
         .then(handleSuccess,handleError);
     }
 
@@ -10,7 +10,7 @@ myApp.factory('userService',['$http', '$q', function($http,$q,sessionService){
         var form = {
             mail : mail
         }
-        return $http.post("/api/forgot", form)
+        return $http.post("/forgot", form)
         .then(handleSuccess, handleError);
     };
 
@@ -18,7 +18,7 @@ myApp.factory('userService',['$http', '$q', function($http,$q,sessionService){
         var form = {
             password : password
         }
-        return $http.post("/api/resetpw/"+token, form)
+        return $http.post("/resetpw/"+token, form)
         .then(handleSuccess, handleError);
     };
 
