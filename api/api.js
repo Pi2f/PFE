@@ -34,7 +34,10 @@ router.get('/logout/:id', function (req, res) {
 });
 
 router.post('/photo', function (req, res) {
-    req.file.id = req.body.id;
+    if(!req.file.id){
+        req.file.id = req.body.id;
+    }
+     
     got('/photo', {
             baseUrl: config.photoApiUrl,
             json: true,
@@ -43,20 +46,20 @@ router.post('/photo', function (req, res) {
             res.send(response.body);
         })
         .catch(handleError);
-});
-
-router.get('/photo/:id', function (req, res) {
-    got('/photo/' + req.params.id, {
+    });
+    
+    router.get('/photo/:id', function (req, res) {
+        got('/photo/' + req.params.id, {
             baseUrl: config.photoApiUrl,
             json: true,
-        }).then(function (response) {
+        }).then(function (response) {            
             res.send(response.body);
         })
         .catch(handleError);
 });
 
 function handleError(error) {
-    // console.log('error:', error);
+    console.log('error:', error);
 }
 
 module.exports = {

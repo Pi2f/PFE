@@ -13,7 +13,7 @@
   <script type="module" src="./popper.js/dist/popper-utils.min.js"></script>
   <script type="module" src="./popper.js/dist/popper.min.js"></script>
   <script type="text/javascript" src="./bootstrap/dist/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="./angular/angular.min.js"></script>
+  <script type="text/javascript" src="./angular/angular.js"></script>
   <script type="text/javascript" src="./@uirouter/angularjs/release/angular-ui-router.min.js"></script>
   <script type="text/javascript" src="./toastr/toastr.js"></script>
   <script src="ng-file-upload/dist/ng-file-upload.min.js"></script>
@@ -46,9 +46,9 @@
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="nav">
         <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-bars text-white"></i>
+          <a class="nav-link" data-toggle="dropdown" data-display="static" role="button" aria-expanded="false"><i class="fas fa-bars text-white"></i>
           </a>
-          <div class="dropdown-menu py-0" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: -100px; transform: translate3d(0px, 42px, 0px);">
+          <div class="dropdown-menu py-0 mt-3 dropdown-menu-lg-right">
             <a class="dropdown-item" href="#" ui-sref="appPhoto" ui-sref-active="active"><i class="fas fa-camera-retro"></i> Appareil photo</a>
             <a class="dropdown-item" href="#" ui-sref="galerie" ui-sref-active="active"><i class="fas fa-images"></i> Galerie</a>
             <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>

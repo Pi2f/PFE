@@ -1,10 +1,10 @@
-myApp.controller('galerieCtrl', function ($scope, photoService) {
-
-    $scope.imgSrc = [];
+myApp.controller('galerieCtrl', function ($scope, photoService) {   
 
     $scope.currentPage = 0;
 
     $scope.pageSize = 9;
+
+    $scope.imgSrc = [];
 
     $scope.numberOfPages = function () {
         return Math.ceil($scope.imgSrc.length / $scope.pageSize);
@@ -13,7 +13,7 @@ myApp.controller('galerieCtrl', function ($scope, photoService) {
 
     $scope.getFiles = function () {
         photoService.GetPhotos().then(function (res) {
-            $scope.imgSrc = res;
+            $scope.imgSrc = res;            
         });
     }
 

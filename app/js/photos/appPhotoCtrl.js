@@ -1,4 +1,4 @@
-myApp.controller('appPhotoCtrl', function ($scope, photoService, $state) {
+myApp.controller('appPhotoCtrl', function ($scope, photoService, $state, $timeout) {
     var _video = null;
 
     $scope.patOpts = {
@@ -72,14 +72,21 @@ myApp.controller('appPhotoCtrl', function ($scope, photoService, $state) {
         $scope.$broadcast('START_WEBCAM');
     }
 
-    $scope.upload = function () {
-        photoService.UploadPhoto($scope.file).then(function() {
-            toastr["success"]("Photo added !!");
-        }, function(){
-            console.log("error");
-        }, function(evt){
-            $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        });
+    $scope.upload = function (file, errFiles) {
+        $scope.f = file;
+        $scope.errFile = errFiles && errFiles[0];
+        if (file) {
+            photoService.UploadPhoto(file).then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                  });
+                // toastr["success"]("Photo added !!");
+            }, function (resp) {
+                console.log('Error status: ' + resp.status);
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+            });
+        }
     };
-
 })

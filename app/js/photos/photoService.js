@@ -3,15 +3,12 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
 
 
     serv.UploadPhoto = function (file) {
-        console.log(sessionService.user.id);
         return Upload.upload({
             url: '/api/photo',
             method: 'POST',
             data: {
                 file: file,
-                body: {
-                    id: sessionService.user.id
-                }
+                id: sessionService.user.id
             }
         });
     }
@@ -82,11 +79,11 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
     serv.GetPhotos = function () {
         return $http.get('/api/photo/' + sessionService.user.id).
         then(function (response) {
-            var imgSrc = [];
+            var imgB64 = [];
             response.data.forEach(document => {
-                imgSrc.push(arrayBufferToBase64(document.img.data.data));
+                imgB64.push(arrayBufferToBase64(document.img.data.data));
             });
-            return imgSrc;
+            return imgB64;
         });
     }
 

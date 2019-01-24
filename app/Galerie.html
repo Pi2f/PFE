@@ -20,7 +20,7 @@
                 </li>
             </ul>
         </div>
-        <div class="row mx-0">
+        <div class="row mx-0" ng-show="imgSrc.length > 0">
             <div class="col-md-3" ng-repeat="i in imgSrc | startFrom: currentPage*pageSize | limitTo:pageSize">
                 <a href="data:image/jpg;base64,{{i}}">
                     <img class="img-fluid img-thumbnail rounded bg-secondary" alt="image" ng-src="data:image/jpg;base64,{{i}}">

@@ -114,6 +114,10 @@ app.post('/resetpw/:token',function(req, res) {
   .catch(handleError);
 });
 
+function handleError(error) {
+    console.log('error:', error);
+}
+
 app.use('/api', api.router);
 
 // const server = https.createServer(options,app).listen(process.env.PORT || config.port, function(){ 
