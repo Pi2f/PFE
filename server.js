@@ -33,6 +33,7 @@ app.use(express.static(__dirname));
 app.use(express.static(__dirname+'/app'));
 app.use(express.static(path.resolve('node_modules')));
 app.use('/api/photo',upload.single('file'));
+app.use('/api/predict',upload.single('file'));  
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*'); //ici être plus restrictif, genre le lien de l'app mobile

@@ -13,6 +13,14 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
         });
     }
 
+    serv.storePhoto = function (imgBase64, cb){
+        sendSnapshotToServer(imgBase64,'photo',cb);
+    }
+
+    serv.predictPhoto = function (imgBase64, cb){
+        sendSnapshotToServer(imgBase64,'predict',cb);
+    }
+
     /**
      * This function could be used to send the image data
      * to a backend server that expects base64 encoded images.
@@ -20,7 +28,7 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
      * In this example, we simply store it in the scope for display.
      */
 
-    serv.sendSnapshotToServer = function sendSnapshotToServer(imgBase64, cb) {
+    function sendSnapshotToServer(imgBase64, api, cb) {
         // Split the base64 string in data and contentType
         var block = imgBase64.split(";");
         // Get the content type of the image
@@ -36,17 +44,20 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
         formDataToUpload.append("file", blob);
         formDataToUpload.append("id", sessionService.user.id);
 
+        $.ajaxSetup({
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('authorization', sessionService.getToken());
+            }
+        });
+
         $.ajax({
-            url:"/api/photo",
-            data: formDataToUpload,// Add as Data the Previously create formData
             type:"POST",
+            url:"/api/"+api,
+            data: formDataToUpload,// Add as Data the Previously create formData
             contentType:false,
             processData:false,
             cache:false,
             dataType:"json", // Change this according to your response from the server.
-            error:function(err){
-                console.error(err);
-            },
             success: cb,
         });
     };

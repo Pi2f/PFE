@@ -1,4 +1,4 @@
-myApp.controller('appPhotoCtrl', function ($scope, photoService, $state, $timeout) {
+myApp.controller('appPhotoCtrl', function ($scope, photoService, Upload, $timeout) {
     var _video = null;
 
     $scope.patOpts = {
@@ -37,38 +37,38 @@ myApp.controller('appPhotoCtrl', function ($scope, photoService, $state, $timeou
 
     $scope.makeSnapshot = function () {
         if (_video) {
-            var patCanvas = document.querySelector('#snapshot');
-            if (!patCanvas) return;
-
-            patCanvas.width = _video.width;
-            patCanvas.height = _video.height;
-            var ctxPat = patCanvas.getContext('2d');
-
-            var idata = getVideoData($scope.patOpts.x, $scope.patOpts.y, $scope.patOpts.w, $scope.patOpts.h);
-            ctxPat.putImageData(idata, 0, 0);
+            var img = document.querySelector('#snapshot');
+            var dataUrl = getVideoDataURL($scope.patOpts.x, $scope.patOpts.y, $scope.patOpts.w, $scope.patOpts.h);
+            img.src = dataUrl;
+            
             $scope.$broadcast('STOP_WEBCAM');
         }
     };
 
-    var getVideoData = function getVideoData(x, y, w, h) {
+    var getVideoDataURL = function getVideoData(x, y, w, h) {
         var hiddenCanvas = document.createElement('canvas');
         hiddenCanvas.width = _video.width;
         hiddenCanvas.height = _video.height;
         var ctx = hiddenCanvas.getContext('2d');
         ctx.drawImage(_video, 0, 0, _video.width, _video.height);
-        return ctx.getImageData(x, y, w, h);
+        return hiddenCanvas.toDataURL();
+
     };
 
-    $scope.send = function(){
-        var patCanvas = document.querySelector('#snapshot');
-        photoService.sendSnapshotToServer(patCanvas.toDataURL(), function(){
+    $scope.send = function () {
+        var img = document.querySelector('#snapshot');
+        photoService.storePhoto(img.src, function () {
             $('#myModal').modal('hide');
             toastr["success"]("Photo added !!");
-            $state.go('galerie');
+            // $state.go('galerie');
+        });
+
+        photoService.predictPhoto(img.src, function (response) {
+            console.log(response);
         });
     }
 
-    $scope.cancel = function(){
+    $scope.cancel = function () {
         $scope.$broadcast('START_WEBCAM');
     }
 
@@ -79,7 +79,7 @@ myApp.controller('appPhotoCtrl', function ($scope, photoService, $state, $timeou
             photoService.UploadPhoto(file).then(function (response) {
                 $timeout(function () {
                     file.result = response.data;
-                  });
+                });
                 // toastr["success"]("Photo added !!");
             }, function (resp) {
                 console.log('Error status: ' + resp.status);
