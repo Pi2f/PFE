@@ -12,8 +12,10 @@ myApp.controller('galerieCtrl', function ($scope, photoService) {
 
 
     $scope.getFiles = function () {
+        $scope.isLoading = true;
         photoService.GetPhotos().then(function (res) {
-            $scope.imgSrc = res;            
+            $scope.imgSrc = res;
+            $scope.isLoading = false;            
         });
     }
 

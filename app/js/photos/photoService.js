@@ -17,8 +17,12 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
         sendSnapshotToServer(imgBase64,'photo',cb);
     }
 
-    serv.predictPhoto = function (imgBase64, cb){
-        sendSnapshotToServer(imgBase64,'predict',cb);
+    serv.servicePhoto = function (imgBase64, cb){
+        sendSnapshotToServer(imgBase64,'service',cb);
+    }
+
+    serv.mailPhoto = function (imgBase64, cb){
+        sendSnapshotToServer(imgBase64,'photo/mail',cb);
     }
 
     /**
@@ -43,6 +47,7 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
         var formDataToUpload = new FormData();
         formDataToUpload.append("file", blob);
         formDataToUpload.append("id", sessionService.user.id);
+        formDataToUpload.append("mail", sessionService.user.mail);
 
         $.ajaxSetup({
             beforeSend: function(xhr) {
@@ -57,7 +62,7 @@ myApp.factory('photoService', ['$http', 'Upload', 'sessionService', function ($h
             contentType:false,
             processData:false,
             cache:false,
-            dataType:"json", // Change this according to your response from the server.
+            // dataType:"json", // Change this according to your response from the server.
             success: cb,
         });
     };

@@ -58,7 +58,17 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
             name: 'appPhoto',
             url: '/appPhoto',
             templateUrl: './AppareilPhoto.html',
-            controller: 'appPhotoCtrl'
+            controller: 'appPhotoCtrl',
+        }
+
+        var appCheckListState = {
+            name: 'appCheckList',
+            url: '/appCheckList',
+            templateUrl: './AppCheckList.html',
+            controller: 'appCheckListCtrl',
+            params: {
+                imgBase64: null,
+            },
         }
 
         $stateProvider.state(homeState);
@@ -67,6 +77,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider.state(mdpOublieState);
         $stateProvider.state(mdpReinitState);
         $stateProvider.state(appPhotoState);
+        $stateProvider.state(appCheckListState);
 
         $urlRouterProvider.otherwise('/');
 

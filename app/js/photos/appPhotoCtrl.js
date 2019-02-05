@@ -1,5 +1,6 @@
-myApp.controller('appPhotoCtrl', function ($scope, photoService, Upload, $timeout) {
+myApp.controller('appPhotoCtrl', function ($scope, photoService, $state, Upload) {
     var _video = null;
+    $scope.$broadcast('START_WEBCAM');
 
     $scope.patOpts = {
         x: 0,
@@ -59,12 +60,8 @@ myApp.controller('appPhotoCtrl', function ($scope, photoService, Upload, $timeou
         var img = document.querySelector('#snapshot');
         photoService.storePhoto(img.src, function () {
             $('#myModal').modal('hide');
-            toastr["success"]("Photo added !!");
-            // $state.go('galerie');
-        });
-
-        photoService.predictPhoto(img.src, function (response) {
-            console.log(response);
+            toastr["success"]("Photo added !!");            
+            $state.go('appCheckList', { imgBase64: img.src });
         });
     }
 
@@ -77,15 +74,15 @@ myApp.controller('appPhotoCtrl', function ($scope, photoService, Upload, $timeou
         $scope.errFile = errFiles && errFiles[0];
         if (file) {
             photoService.UploadPhoto(file).then(function (response) {
-                $timeout(function () {
-                    file.result = response.data;
+                file.result = response.data;
+                toastr["success"]("Photo added !!");
+                Upload.base64DataUrl(file).then(function(url){
+                    $state.go('appCheckList', { imgBase64: url });
                 });
-                // toastr["success"]("Photo added !!");
             }, function (resp) {
                 console.log('Error status: ' + resp.status);
-            }, function (evt) {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+            }, function (evt) {            
+                $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);                 
             });
         }
     };

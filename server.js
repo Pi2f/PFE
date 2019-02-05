@@ -1,4 +1,4 @@
-// const https = require('https');
+const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const express = require('express');
@@ -33,7 +33,8 @@ app.use(express.static(__dirname));
 app.use(express.static(__dirname+'/app'));
 app.use(express.static(path.resolve('node_modules')));
 app.use('/api/photo',upload.single('file'));
-app.use('/api/predict',upload.single('file'));  
+app.use('/api/service',upload.single('file'));  
+app.use('/api/photo/mail',upload.single('file'));  
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*'); //ici être plus restrictif, genre le lien de l'app mobile
@@ -121,7 +122,7 @@ function handleError(error) {
 
 app.use('/api', api.router);
 
-// const server = https.createServer(options,app).listen(process.env.PORT || config.port, function(){ 
-const server = http.createServer(app).listen(process.env.PORT || config.port, function(){ 
+const server = https.createServer(options,app).listen(process.env.PORT || config.port, function(){ 
+// const server = http.createServer(app).listen(process.env.PORT || config.port, function(){ 
   console.log(`Example app listening on port ${config.port}!`)
 });

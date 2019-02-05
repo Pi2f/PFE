@@ -51,5 +51,15 @@ module.exports = {
             if(err) console.log(err);
             else cb(null,photo);
         })
+    },
+    
+    deletePhoto: function(data,cb){
+        photoModel.remove({
+            ObjectId: data.photoId
+        }, function(err){
+            if(err){ 
+                console.log(err);
+            }
+        })
     }
 }

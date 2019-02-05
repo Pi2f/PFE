@@ -6,6 +6,7 @@ const config = require('./config.js');
 const methodOverride = require('method-override');
 const helmet = require('helmet');
 const photo = require('./photo.js');
+const mail = require('./mail.js');
 
 const app = express();
 
@@ -30,6 +31,12 @@ app.get('/photo/:id',function(req,res){
     photo.getPhoto(req.params.id, function(err, photos){
       res.status(200).send(photos);
     });
+});
+
+app.post('/photo/mail', function (req, res) {
+  mail.sendMail(req.body.mail, req.body.buffer, function(){
+    res.status(200).end();
+  });
 });
 
 const server = http.createServer(app).listen(config.port, function () {

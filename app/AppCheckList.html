@@ -1,0 +1,15 @@
+<div ng-init="services()" class="fluid-container text-center my-5" ng-controller="appCheckListCtrl">
+    <h1><strong>Checklist</strong></h1>
+    <div class=" my-3 text-center">
+        <ul class="list-group">
+            <li ng-repeat="item in items" class="list-group-item bg-transparent mx-auto border-0">
+                {{ item.title }}
+                <span ng-if="item.randomNum%3 == 0"> <i class="text-success fas fa-check"></i></span>
+                <span ng-if="item.randomNum%3 == 1"> <i class="text-warning fas fa-exclamation-triangle"></i></span>
+                <span ng-if="item.randomNum%3 == 2"> <i class="text-danger fas fa-exclamation"></i></span>
+            </li>
+          </ul>
+          <button type="button" class="btn btn-primary btn-lg mx-auto" ng-click="sendMail()">
+              <i class="far fa-envelope mr-2"></i>Envoyer mail </button>
+    </div>
+</div>

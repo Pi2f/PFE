@@ -1,4 +1,4 @@
-<div class="fluid-container text-center" ng-controller="galerieCtrl">
+<div class="fluid-container text-center my-5" ng-controller="galerieCtrl">
     <h1><strong>Galerie</strong></h1>
     <div ng-if="!imgSrc">
         <h4>Pas de photos enregistrées ... </h4>
@@ -20,7 +20,17 @@
                 </li>
             </ul>
         </div>
-        <div class="row mx-0" ng-show="imgSrc.length > 0">
+        <div ng-if="isLoading" class="mesh-loader">
+            <div class="set-one">
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+            <div class="set-two">
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+        <div  ng-if="!isLoading" class="row mx-0" ng-show="imgSrc.length > 0">
             <div class="col-md-3" ng-repeat="i in imgSrc | startFrom: currentPage*pageSize | limitTo:pageSize">
                 <a href="data:image/jpg;base64,{{i}}">
                     <img class="img-fluid img-thumbnail rounded bg-secondary" alt="image" ng-src="data:image/jpg;base64,{{i}}">
