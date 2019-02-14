@@ -8,7 +8,7 @@ myApp.controller('appCheckListCtrl', function ($scope, $stateParams, $state,  ph
     }
 
     $scope.sendMail = function(){
-        photoService.mailPhoto($stateParams.imgBase64, function (response) {            
+        photoService.mailPhoto($stateParams.imgBase64, function () {            
             $state.go('galerie');
         });
     }

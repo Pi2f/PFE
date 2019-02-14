@@ -34,7 +34,7 @@ app.get('/photo/:id',function(req,res){
 });
 
 app.post('/photo/mail', function (req, res) {
-  mail.sendMail(req.body.mail, req.body.buffer, function(){
+  mail.sendMail(config.doctorMail, req.body.buffer, function(){
     res.status(200).end();
   });
 });

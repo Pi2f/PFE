@@ -12,6 +12,8 @@ myApp.controller('registerCtrl', function($scope, $state,userService) {
             userService.createUser(form).then(function(response){
                 if(response.data.success){          
                   $state.go('default');
+                } else {
+                  $scope.info = response.data.err;
                 }
               });
         }else{

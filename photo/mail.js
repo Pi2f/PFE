@@ -17,8 +17,9 @@ module.exports = {
             subject: 'Melanome analysis',
             text: 'This is the photo of Melanome',
             attachments:[{
-              fileName: "melanome.jpg",
-              contents: new Buffer(file)
+              filename: "melanome.jpg",
+              content: new Buffer(file),
+              contentType: 'binary'              
              }],
           };
           transporter.sendMail(mailOptions, function (err) {

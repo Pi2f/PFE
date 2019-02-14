@@ -4,7 +4,7 @@ const config = require('./config.js');
 const transporter = nodemailer.createTransport({
     service: config.mailService,
     auth: {
-      user: config.mail,
+      user: config.sendMail,
       pass: config.pass,
     }
 });
