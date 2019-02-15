@@ -142,7 +142,11 @@ app.post('/user/blocked', function (req, res) {
 app.post('/forgot', function (req, res) {
   waterfall([
     function (done) {
-      
+        crypto.randomBytes(20, function (err, buf) {
+            if (err) console.log("erreur crypto : " + err)
+            const token = buf.toString('hex');
+            done(err, token);
+        });
     },
     function (token, done) {
       user.changePassword(req.body, token, done)
@@ -162,7 +166,7 @@ app.post('/reset/:token', function (req, res) {
       user.resetPassword(req.params.token, req.body.password, done)
     },
     function (user, done) {
-      mail.reste(user,done);
+      mail.resetMail(user,done);
     }
   ], function (err) {
     if (err) console.log("ERREUR : "+err);

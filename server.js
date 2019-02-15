@@ -54,13 +54,16 @@ app.post('/authenticate', function(req, res){
       json: true,
       body: req.body })
   .then(response => {
-      createToken(response.body.user, function (response) {
-          res.send(response);
-      });
+      //console.log(response.body);
+      if(response.body.user){
+          createToken(response.body.user, function (response) {
+              res.send(response);
+          });
+      } else {
+          res.send(response.body);
+      }
   })
-  .catch((error) => {        
-      res.status(error.statusCode).end();
-  });
+  .catch(handleError);
 });
 
 function createToken(user,cb) {

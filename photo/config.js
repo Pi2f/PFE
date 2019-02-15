@@ -1,5 +1,5 @@
 module.exports = {
-    urlDB : 'mongodb://192.168.99.100:32768/PFE',
+    urlDB : 'mongodb://localhost:27017/PFE',
     port : "3002",
     sendMail: 'tustreamesnoreply@gmail.com',
     pass: 'heihei89',

@@ -5,13 +5,13 @@ module.exports = {
     photoApiUrl: 'http://localhost:3002/',
     // Example with 2 same services
     services: [
-        {
+        /*{
             url: 'http://localhost:8090/',
             path:"/blurDetection",
         },
         {
             url: 'http://localhost:8090/',
             path:"/blurDetection",
-        },
+        },*/
     ]
 }

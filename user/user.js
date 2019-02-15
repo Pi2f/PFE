@@ -230,4 +230,49 @@ module.exports = {
             }
         });
     },
+
+    setActivationToken: function (body, token, done) {
+        return userModel.findOneAndUpdate({
+            mail: body.mail
+        }, {
+            activationToken: token,
+            activationTokenExpires: Date.now() + 3600000,
+        }, function (err, user) {
+            if (err) {
+                done('No account with that email address exists.', null, null);
+            } else {
+                done(err, token, user);
+            }
+        });
+    },
+
+    activateAccount: function (token, done) {
+        return userModel.findOne({
+                activationToken: token,
+                activationTokenExpires: {
+                    $gt: Date.now()
+                }
+            },
+            function (err, user) {
+                if (err) {
+                    done('Activation token is invalid.', null);
+                    user.remove(function (err) {
+                        if (err) {
+                            done(err, null);
+                        }
+                    });
+                } else {
+                    user.updateOne({
+                        isActive: true,
+                        activationToken: undefined,
+                        activationTokenExpires: undefined
+                    }, {}, function (err) {
+                        if (err) {
+                            done(err, null);
+                        }
+                    });
+                    done(err, user);
+                }
+            });
+    },
 }
